@@ -32,4 +32,8 @@ export class Product {
   active_discount: boolean;
   @CreateDateColumn()
   created_at: Date;
+
+  // Relations
+  @OneToMany(() => ProductDetail, (detail) => detail.product)
+  details: ProductDetail[];
 }

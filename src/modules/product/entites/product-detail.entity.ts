@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "./product.entity";
 
 @Entity()
 export class ProductDetail {
@@ -14,7 +15,9 @@ export class ProductDetail {
   @Column()
   value: string;
 
-  //   Relations
-  //   @ManyToOne(() => Product, (product) => product.details, {onDelete: "CASCADE"})
-  //   product: Product;
+  Relations;
+  @ManyToOne(() => Product, (product) => product.details, {
+    onDelete: "CASCADE",
+  })
+  product: Product;
 }
