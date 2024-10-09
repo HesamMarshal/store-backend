@@ -5,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Product } from "./product.entity";
 
 @Entity()
 export class ProductColor {
@@ -27,8 +28,10 @@ export class ProductColor {
 
   // Relations
 
-  // @ManyToOne(() => Product, (product) => product.colors, {onDelete: "CASCADE"})
-  // product: Product;
+  @ManyToOne(() => Product, (product) => product.colors, {
+    onDelete: "CASCADE",
+  })
+  product: Product;
   // @OneToMany(() => Basket, (basket) => basket.discount)
   // baskets: Basket[];
   // @OneToMany(() => OrderItems, (order) => order.color)

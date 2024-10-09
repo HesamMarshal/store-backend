@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { ProductDetail } from "./product-detail.entity";
 import { ProductSize } from "./product-size.entity";
+import { ProductColor } from "./product-color.entity";
 
 @Entity()
 export class Product {
@@ -40,4 +41,7 @@ export class Product {
 
   @OneToMany(() => ProductSize, (size) => size.product)
   sizes: ProductSize[];
+
+  @OneToMany(() => ProductColor, (color) => color.product)
+  colors: ProductColor[];
 }
