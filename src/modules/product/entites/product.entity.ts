@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { ProductDetail } from "./product-detail.entity";
+import { ProductSize } from "./product-size.entity";
 
 @Entity()
 export class Product {
@@ -36,4 +37,7 @@ export class Product {
   // Relations
   @OneToMany(() => ProductDetail, (detail) => detail.product)
   details: ProductDetail[];
+
+  @OneToMany(() => ProductSize, (size) => size.product)
+  sizes: ProductSize[];
 }

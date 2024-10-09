@@ -5,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Product } from "./product.entity";
 
 @Entity()
 export class ProductSize {
@@ -30,8 +31,8 @@ export class ProductSize {
   active_discount: boolean;
 
   //   Relationss
-  //   @ManyToOne(() => Product, (product) => product.sizes, {onDelete: "CASCADE"})
-  //   product: Product;
+  @ManyToOne(() => Product, (product) => product.sizes, { onDelete: "CASCADE" })
+  product: Product;
   //   @OneToMany(() => Basket, (basket) => basket.size)
   //   baskets: Basket[];
   //   @OneToMany(() => OrderItems, (order) => order.size)
