@@ -1,21 +1,63 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { AddDetailDto, UpdateDetailDto } from "../dto/detail.dto";
+import { ProductService } from "./product.service";
+import { ProductDetail } from "../entites/product-detail.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class ProductDetailService {
-  create(detailDto: AddDetailDto) {
-    throw new Error("Method not implemented.");
+  constructor(
+    private productService: ProductService,
+    @InjectRepository(ProductDetail)
+    private productDetailRepository: Repository<ProductDetail>
+  ) {}
+  async create(detailDto: AddDetailDto) {
+    const { key, value, productId } = detailDto;
+    await this.productService.findOne(productId);
+    await this.productDetailRepository.insert({
+      key,
+      value,
+      productId,
+    });
+    return {
+      message: "created detail of product successful",
+    };
   }
 
-  find(productId: number) {
-    throw new Error("Method not implemented.");
+  async find(productId: number) {
+    return this.productDetailRepository.find({
+      where: { productId },
+    });
   }
 
-  update(id: number, detailDto: UpdateDetailDto) {
-    throw new Error("Method not implemented.");
+  async findOne(id: number) {
+    const detail = await this.productDetailRepository.findOne({
+      where: { id },
+    });
+    if (!detail) throw new NotFoundException();
+    return detail;
+  }
+  async update(id: number, detailDto: UpdateDetailDto) {
+    const { key, value, productId } = detailDto;
+    const detail = await this.findOne(id);
+    if (productId) {
+      await this.productService.findOne(productId);
+      detail.productId = productId;
+    }
+    if (key) detail.key = key;
+    if (value) detail.value = value;
+    await this.productDetailRepository.save(detail);
+    return {
+      message: "updated detail of product successful",
+    };
   }
 
-  delete(id: number) {
-    throw new Error("Method not implemented.");
+  async delete(id: number) {
+    await this.findOne(id);
+    await this.productDetailRepository.delete({ id });
+    return {
+      message: "Deleted detail of product successful.",
+    };
   }
 }
