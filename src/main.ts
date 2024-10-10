@@ -7,6 +7,7 @@ async function bootstrap() {
   SwaggerConfigInit(app);
   await app.listen(3000, () => {
     console.log("server run: http://localhost:3000");
+    console.log("Swagger on: http://localhost:3000/swagger");
   });
 }
 bootstrap();
