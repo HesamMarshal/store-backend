@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { CreateProductDto, UpdateProductDto } from "../dto/product.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Product } from "../entites/product.entity";
@@ -44,19 +48,70 @@ export class ProductService {
     };
   }
 
-  find() {
-    throw new Error("Method not implemented.");
+  async find() {
+    return this.productRepository.find({
+      where: {},
+      relations: { colors: true, sizes: true, details: true },
+      select: {
+        details: {
+          key: true,
+          value: true,
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
-    throw new Error("Method not implemented.");
+  async findOne(id: number) {
+    const product = await this.productRepository.findOne({
+      where: { id },
+      relations: { colors: true, sizes: true, details: true },
+    });
+    if (!product) throw new NotFoundException();
+    return product;
   }
 
-  update(id: number, productDto: UpdateProductDto) {
-    throw new Error("Method not implemented.");
+  async update(id: number, productDto: UpdateProductDto) {
+    const {
+      title,
+      slug,
+      active_discount,
+      code,
+      content,
+      count,
+      discount,
+      price,
+      type,
+    } = productDto;
+    const product = await this.findOneLean(id);
+    if (title) product.title = title;
+    if (slug) product.slug = slug;
+    if (content) product.content = content;
+    if (discount) product.discount = discount;
+    if (active_discount) product.active_discount = toBoolean(active_discount);
+    if (code) product.code = code;
+    if (type === ProductType.Single) {
+      Object.assign(product, { price, count });
+    }
+    await this.productRepository.save(product);
+    return {
+      message: "updated product successful",
+    };
   }
 
-  delete(id: number) {
-    throw new Error("Method not implemented.");
+  async delete(id: number) {
+    await this.findOne(id);
+    await this.productRepository.delete({ id });
+    return {
+      message: "Deleted product successful.",
+    };
+  }
+
+  //   Helper methods
+  async findOneLean(id: number) {
+    const product = await this.productRepository.findOne({
+      where: { id },
+    });
+    if (!product) throw new NotFoundException();
+    return product;
   }
 }
