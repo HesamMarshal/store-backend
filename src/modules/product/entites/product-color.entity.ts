@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Product } from "./product.entity";
+import { Basket } from "src/modules/basket/entity/basket.entity";
 
 @Entity()
 export class ProductColor {
@@ -32,8 +33,9 @@ export class ProductColor {
     onDelete: "CASCADE",
   })
   product: Product;
-  // @OneToMany(() => Basket, (basket) => basket.discount)
-  // baskets: Basket[];
+  @OneToMany(() => Basket, (basket) => basket.discount)
+  baskets: Basket[];
+
   // @OneToMany(() => OrderItems, (order) => order.color)
   // orders: OrderItems[];
 }

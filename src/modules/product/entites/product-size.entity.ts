@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Product } from "./product.entity";
+import { Basket } from "src/modules/basket/entity/basket.entity";
 
 @Entity()
 export class ProductSize {
@@ -33,8 +34,10 @@ export class ProductSize {
   //   Relationss
   @ManyToOne(() => Product, (product) => product.sizes, { onDelete: "CASCADE" })
   product: Product;
-  //   @OneToMany(() => Basket, (basket) => basket.size)
-  //   baskets: Basket[];
+
+  @OneToMany(() => Basket, (basket) => basket.size)
+  baskets: Basket[];
+
   //   @OneToMany(() => OrderItems, (order) => order.size)
   //   orders: OrderItems[];
 }

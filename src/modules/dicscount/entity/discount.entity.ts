@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { DiscountType } from "../type.enum";
+import { Basket } from "src/modules/basket/entity/basket.entity";
 
 @Entity()
 export class Discount {
@@ -29,4 +30,7 @@ export class Discount {
 
   @Column({ type: "enum", enum: DiscountType })
   type: string;
+
+  @OneToMany(() => Basket, (basket) => basket.discount)
+  baskets: Basket[];
 }
