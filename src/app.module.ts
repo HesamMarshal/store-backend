@@ -4,6 +4,7 @@ import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ProductModule } from "./modules/product/product.module";
 import { DiscountModule } from "./modules/dicscount/discount.module";
+import { BasketModule } from "./modules/basket/basket.module";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { DiscountModule } from "./modules/dicscount/discount.module";
     }),
     ProductModule,
     DiscountModule,
+    BasketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
